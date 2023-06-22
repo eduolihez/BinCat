@@ -4,18 +4,17 @@ import base64
 import time
 import qrcode
 
-# We declare all the veriables
+init(autoreset=True)
+
+# We declare all the variables
 fecha = time.strftime("%d-%m-%y %X")
 fecha2 = time.strftime("%x")
 chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789"
 nums = "9183726450"
-init(autoreset=True)
 
-username = input(
-    Fore.GREEN + '[+] ' + Style.RESET_ALL + 'Enter a username: ')
+username = input(Fore.GREEN + '[+] ' + Style.RESET_ALL + 'Enter a username: ')
 
 for c in range(1):
-
     part1 = ""
     part2 = ""
     part3 = fecha2
@@ -30,7 +29,7 @@ for c in range(1):
     part2 = str(part2)
     part3 = str(part3)
 
-################################ ENCODING ################################
+    ################################ ENCODING ################################
     # We encode the ID in Base64
     encodedBytes = base64.b64encode(part1.encode("utf-8"))
     part1encode = str(encodedBytes, "utf-8")
@@ -39,7 +38,7 @@ for c in range(1):
     encodedBytes = base64.b64encode(part3.encode("utf-8"))
     part3encode = str(encodedBytes, "utf-8")
 
-##########################################################################
+    ##########################################################################
 
     # We put all the parts together
     token = part1encode + "." + part2 + "." + part3encode
@@ -47,19 +46,18 @@ for c in range(1):
     # We show the Token created
     print(Fore.BLUE + '[?] ' + Style.RESET_ALL + 'The Token for ' +
           Style.BRIGHT + username + ' is: ' + Fore.YELLOW + token)
-    print(Fore.BLUE + '[?] ' + Style.RESET_ALL + 'The User ID for' +
+    print(Fore.BLUE + '[?] ' + Style.RESET_ALL + 'The User ID for ' +
           Style.BRIGHT + username + ' is: ' + Fore.YELLOW + part1)
     print(Fore.BLUE + '[?] ' + Style.RESET_ALL +
           'The Token Creation Date is the: ' + Fore.YELLOW + fecha)
 
 # Save the Token as QR
-
 data = token
 filename = 'BinCat_Token.png'
 img = qrcode.make(data)
 img.save(filename)
-print(Fore.GREEN + '[+]' + 'Token saved as QR')
+print(Fore.GREEN + '[+] ' + 'Token saved as QR')
 
-# These two lines is to adapt the program to an executable .exe
-exit = input('Press enter to exit...')
-exit = quit()
+# These two lines are to adapt the program to an executable .exe
+input('Press enter to exit...')
+quit()
