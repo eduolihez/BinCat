@@ -2,17 +2,19 @@
 
 ## Supported Versions
 
-BinCat versions with security and coding issues support are that ones below:
+BinCat versions with security and coding issues support are as follows:
 
 | Version | Supported          |
 | ------- | ------------------ |
+| 1.6.3   | :white_check_mark: |
+| 1.6.2   | :white_check_mark: |
 | 1.6.1   | :white_check_mark: |
 | 1.6.0   | :x:                |
-| 1.5.2   | :x: |
+| 1.5.2   | :x:                |
 | < 1.5   | :x:                |
 
 ## Reporting a Vulnerability
 
-If you have any issues with old versions, remember that they are not supported anymore, so first, be sure you have the newest BinCat version.
+If you encounter any issues with older versions, please note that they are no longer supported. Make sure you have the latest version of BinCat installed.
 
-If you have an Issue with the last version of BinCat, please leave me an Issue in [Issue Page](https://github.com/Hipotesi-Dev/BinCat/issues). I will check it as soon as I can. It can be that your issue is not the first one to be solved, that's because I give priority to that one's that needed.
+If you have an issue with the latest version of BinCat, please submit an issue on the [Issue Page](https://github.com/titodelas/BinCat/issues). I will review it as soon as possible. Please note that your issue may not be the first one to be addressed, as priority is given to those that require immediate attention.
