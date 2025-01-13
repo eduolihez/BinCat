@@ -1,0 +1,10 @@
+version: 2
+updates:
+  # Define the package manager to use
+  - package-ecosystem: "pip"  # For Python projects, change this if using another package manager (e.g., npm, yarn)
+    directory: "/"  # Location of your dependency file, '/' refers to the root of the repository
+    schedule:
+      interval: "weekly"  # Options: "daily", "weekly", "monthly"
+    commit-message:
+      prefix: "fix"  # Commit message prefix for the update PRs
+    versioning-strategy: "increase"  # Strategy to use when a new version is available ("increase", "lockfile-only", "auto")
