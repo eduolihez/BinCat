@@ -1,52 +1,45 @@
+from colorama import Fore, Style, init
 from bincat.token_manager import TokenManager
-from colorama import Fore, Back, Style, init
 
 # Initialize colorama
 init(autoreset=True)
 
 def main():
-    print(Fore.CYAN + Style.BRIGHT + "Welcome to BinCat - Token Management\n")
-
-    # Create an instance of TokenManager
     token_manager = TokenManager()
 
     while True:
-        print(Fore.YELLOW + "\nWhat action would you like to perform?")
-        print(Fore.GREEN + "1. Generate a token")
-        print(Fore.GREEN + "2. Revoke a token")
-        print(Fore.GREEN + "3. Validate a token")
-        print(Fore.RED + "4. Exit")
-
-        choice = input(Fore.WHITE + "Select an option (1-4): ")
+        print(f"{Fore.CYAN}=== BinCat Token Manager ===")
+        print(f"{Fore.YELLOW}1. Generate Token")
+        print(f"{Fore.YELLOW}2. Revoke Token")
+        print(f"{Fore.YELLOW}3. Validate Token")
+        print(f"{Fore.YELLOW}4. Exit")
+        choice = input(f"{Fore.CYAN}Choose an option: ")
 
         if choice == "1":
-            # Generate a new token
+            print(f"{Fore.GREEN}Generating a new token...")
             token = token_manager.generate_token()
-            print(Fore.GREEN + f"Generated token: {token}")
+            print(f"{Fore.GREEN}Token generated: {token}")
 
         elif choice == "2":
-            # Revoke a token
-            token = input(Fore.WHITE + "Enter the token to revoke: ")
+            token = input(f"{Fore.CYAN}Enter the token to revoke: ")
             if token_manager.revoke_token(token):
-                print(Fore.RED + f"Token {token} successfully revoked.")
+                print(f"{Fore.GREEN}Token successfully revoked.")
             else:
-                print(Fore.YELLOW + f"Could not revoke token {token}.")
+                print(f"{Fore.RED}Failed to revoke token. Ensure it exists and has not been revoked.")
 
         elif choice == "3":
-            # Validate a token
-            token = input(Fore.WHITE + "Enter the token to validate: ")
-            is_valid = token_manager.is_token_valid(token)
-            if is_valid:
-                print(Fore.GREEN + f"Token {token} is valid.")
+            token = input(f"{Fore.CYAN}Enter the token to validate: ")
+            if token_manager.is_token_valid(token):
+                print(f"{Fore.GREEN}Token is valid.")
             else:
-                print(Fore.YELLOW + f"Token {token} is either invalid or expired.")
+                print(f"{Fore.RED}Token is invalid or expired.")
 
         elif choice == "4":
-            print(Fore.CYAN + Style.BRIGHT + "Exiting the program...")
+            print(f"{Fore.GREEN}Exiting the program. Goodbye!")
             break
 
         else:
-            print(Fore.RED + "Invalid option. Please try again.")
+            print(f"{Fore.RED}Invalid choice. Please try again.")
 
 if __name__ == "__main__":
     main()
