@@ -6,8 +6,8 @@ BinCat is a robust token management system designed for secure token generation,
 ---
 
 ## To Do
-[] Improve Web Pannel
-[] Separate Logs (token logs, web logs, etc)
+- [ ] Improve Web Pannel
+- [ ] Separate Logs (token logs, web logs, etc)
 
 ---
 ## Features
