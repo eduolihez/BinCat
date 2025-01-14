@@ -4,12 +4,6 @@
 BinCat is a robust token management system designed for secure token generation, validation, and database handling. This project leverages encryption, logging, and modular Python components to offer a flexible solution for managing tokens in various applications. It includes tools to maintain system integrity and ensures ease of use for developers.
 
 ---
-
-## To Do
-- [ ] Improve Web Pannel
-- [ ] Separate Logs (token logs, web logs, etc)
-
----
 ## Features
 - **Secure Token Generation**:
   - Generates unique, encrypted tokens using the Fernet encryption standard.
