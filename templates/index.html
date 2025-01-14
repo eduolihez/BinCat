@@ -3,94 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BinCat Token Management</title>
-    <link rel="stylesheet" href="/static/styles.css">
-    <script defer src="/static/scripts.js"></script>
+    <title>BinCat Management Panel</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
+        <div class="banner">
+            <h1>BinCat Management Panel</h1>
+        </div>
         <nav>
-            <div class="logo">BinCat</div>
             <ul>
                 <li><a href="#dashboard">Dashboard</a></li>
-                <li><a href="#manage-tokens">Manage Tokens</a></li>
+                <li><a href="#tokens">Token Management</a></li>
                 <li><a href="#logs">Logs</a></li>
-                <li><a href="#settings">Settings</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
-        <!-- Dashboard Section -->
-        <section id="dashboard" class="section">
-            <h1>Dashboard</h1>
-            <div class="cards">
-                <div class="card">
-                    <h2>Total Tokens</h2>
-                    <p id="total-tokens">0</p>
-                </div>
-                <div class="card">
-                    <h2>Active Users</h2>
-                    <p id="active-users">0</p>
-                </div>
-                <div class="card">
-                    <h2>System Logs</h2>
-                    <p id="system-logs">0 entries</p>
-                </div>
-            </div>
+        <section id="dashboard">
+            <h2>Dashboard</h2>
+            <p>Welcome to the BinCat management panel. Navigate through the sections to manage tokens and view logs.</p>
         </section>
 
-        <!-- Manage Tokens Section -->
-        <section id="manage-tokens" class="section">
-            <h1>Manage Tokens</h1>
-            <div class="actions">
-                <button id="create-token">Create Token</button>
-                <button id="validate-token">Validate Token</button>
-                <button id="purge-tokens">Purge Tokens</button>
-            </div>
-
-            <div class="form" id="token-form">
-                <label for="token-input">Enter Token:</label>
-                <input type="text" id="token-input">
-                <button id="submit-token">Submit</button>
-            </div>
-
-            <div id="token-result"></div>
+        <section id="tokens">
+            <h2>Token Management</h2>
+            <form id="token-form">
+                <div>
+                    <label>
+                        <input type="radio" name="action" value="generate" checked>
+                        Generate Token
+                    </label>
+                    <label>
+                        <input type="radio" name="action" value="validate">
+                        Validate Token
+                    </label>
+                    <label>
+                        <input type="radio" name="action" value="purge">
+                        Purge Tokens
+                    </label>
+                </div>
+                <input type="text" id="token-input" placeholder="Enter token (if applicable)" />
+                <button type="submit">Submit</button>
+            </form>
+            <button id="fetch-tokens">Fetch All Tokens</button>
+            <ul id="token-list"></ul>
         </section>
 
-        <!-- Logs Section -->
-        <section id="logs" class="section">
-            <h1>System Logs</h1>
-            <div class="logs">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Timestamp</th>
-                            <th>Action</th>
-                            <th>Details</th>
-                        </tr>
-                    </thead>
-                    <tbody id="logs-table">
-                        <!-- Logs will be dynamically loaded -->
-                    </tbody>
-                </table>
-                <button id="download-logs">Download Logs</button>
-            </div>
-        </section>
-
-        <!-- Settings Section -->
-        <section id="settings" class="section">
-            <h1>Settings</h1>
-            <div class="settings">
-                <label for="encryption-key">Encryption Key:</label>
-                <input type="text" id="encryption-key" placeholder="Enter new encryption key">
-                <button id="update-key">Update Key</button>
-            </div>
+        <section id="logs">
+            <h2>Logs</h2>
+            <button id="fetch-logs">Fetch Logs</button>
+            <ul id="log-list"></ul>
         </section>
     </main>
 
     <footer>
-        <p>BinCat &copy; 2025 - All rights reserved</p>
+        <p>&copy; 2025 BinCat. All rights reserved.</p>
     </footer>
+
+    <script src="scripts.js"></script>
 </body>
 </html>

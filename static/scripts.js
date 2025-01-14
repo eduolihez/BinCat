@@ -1,38 +1,64 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const totalTokens = document.getElementById('total-tokens');
-    const activeUsers = document.getElementById('active-users');
-    const systemLogs = document.getElementById('system-logs');
-    const logsTable = document.getElementById('logs-table');
-    const downloadLogsButton = document.getElementById('download-logs');
+document.addEventListener('DOMContentLoaded', () => {
+    const tokenForm = document.getElementById('token-form');
+    const fetchTokensButton = document.getElementById('fetch-tokens');
+    const fetchLogsButton = document.getElementById('fetch-logs');
+    const tokenList = document.getElementById('token-list');
+    const logList = document.getElementById('log-list');
 
-    // Mock data to populate dashboard
-    totalTokens.textContent = '150';
-    activeUsers.textContent = '25';
-    systemLogs.textContent = '120 entries';
+    // Handle form submission
+    tokenForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
 
-    // Function to update logs dynamically
-    function loadLogs() {
-        const logs = [
-            { timestamp: '2025-01-13 10:30:00', action: 'Create Token', details: 'Token ABC123 created' },
-            { timestamp: '2025-01-13 11:00:00', action: 'Validate Token', details: 'Token XYZ789 validated' },
-        ];
+        const action = document.querySelector('input[name="action"]:checked').value;
+        const tokenInput = document.getElementById('token-input').value;
 
-        logs.forEach(log => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${log.timestamp}</td>
-                <td>${log.action}</td>
-                <td>${log.details}</td>
-            `;
-            logsTable.appendChild(row);
+        let url = '';
+        let data = {};
+
+        if (action === 'generate') {
+            url = '/generate-token';
+        } else if (action === 'validate') {
+            url = '/validate-token';
+            data = { token: tokenInput };
+        } else if (action === 'purge') {
+            url = '/purge-tokens';
+        }
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
         });
-    }
 
-    // Trigger loading logs
-    loadLogs();
+        const result = await response.json();
+        alert(result.message);
+    });
 
-    // Log download button click event
-    downloadLogsButton.addEventListener('click', function () {
-        alert('Logs downloading...');
+    // Fetch all tokens
+    fetchTokensButton.addEventListener('click', async () => {
+        const response = await fetch('/fetch-tokens');
+        const tokens = await response.json();
+
+        tokenList.innerHTML = '';
+        tokens.forEach(token => {
+            const li = document.createElement('li');
+            li.textContent = token;
+            tokenList.appendChild(li);
+        });
+    });
+
+    // Fetch logs
+    fetchLogsButton.addEventListener('click', async () => {
+        const response = await fetch('/fetch-logs');
+        const logs = await response.json();
+
+        logList.innerHTML = '';
+        logs.forEach(log => {
+            const li = document.createElement('li');
+            li.textContent = log;
+            logList.appendChild(li);
+        });
     });
 });

@@ -1,87 +1,84 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
     color: #333;
 }
 
 header {
-    background-color: #333;
-    color: white;
-    padding: 15px 0;
+    background-color: #2b2d42;
+    color: #edf2f4;
+    padding: 1rem 0;
+    text-align: center;
 }
 
-nav .logo {
-    font-size: 24px;
-    font-weight: bold;
-    margin-left: 20px;
-    display: inline-block;
+header .banner h1 {
+    margin: 0;
+    font-size: 2.5rem;
 }
 
 nav ul {
     list-style: none;
-    float: right;
-    margin-right: 20px;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    background-color: #8d99ae;
 }
 
 nav ul li {
-    display: inline;
-    margin-left: 20px;
+    margin: 0 1rem;
 }
 
 nav ul li a {
-    color: white;
     text-decoration: none;
+    color: #edf2f4;
+    font-weight: bold;
 }
 
 main {
-    padding: 20px;
+    padding: 2rem;
 }
 
-.section {
-    margin-bottom: 30px;
+h2 {
+    color: #2b2d42;
 }
 
-.cards {
-    display: flex;
-    justify-content: space-around;
-}
-
-.card {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    width: 30%;
-}
-
-.card h2 {
-    font-size: 18px;
-    margin-bottom: 10px;
+form, button {
+    margin-top: 1rem;
 }
 
 button {
-    padding: 10px 20px;
-    margin-top: 20px;
+    background-color: #2b2d42;
+    color: #edf2f4;
     border: none;
-    border-radius: 5px;
+    padding: 0.5rem 1rem;
     cursor: pointer;
 }
 
 button:hover {
-    background-color: #0056b3;
-    color: white;
+    background-color: #8d99ae;
+}
+
+ul {
+    padding: 0;
+    list-style: none;
+}
+
+ul li {
+    background-color: #edf2f4;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    border: 1px solid #2b2d42;
 }
 
 footer {
-    background-color: #333;
-    color: white;
     text-align: center;
-    padding: 10px 0;
+    padding: 1rem;
+    background-color: #2b2d42;
+    color: #edf2f4;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }
