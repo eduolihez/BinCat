@@ -1,4 +1,4 @@
-# BinCat | NewGen
+# BinCat | NewGen (New Update Comming Soon)
 
 ## Overview
 BinCat is a robust token management system designed for secure token generation, validation, and database handling. This project leverages encryption, logging, and modular Python components to offer a flexible solution for managing tokens in various applications. It includes tools to maintain system integrity and ensures ease of use for developers.
