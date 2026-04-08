@@ -1,6 +1,6 @@
 colorama==0.4.6
 bcrypt==5.0.0
-cryptography==46.0.5
+cryptography==46.0.7
 python-dotenv
 flask 
 flask-sqlalchemy 
