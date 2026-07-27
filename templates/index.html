@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BinCat | Premium Token Manager Dashboard</title>
+  <!-- Google Fonts - Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-color: #080c14;
+      --card-bg: rgba(17, 24, 40, 0.65);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-border-glow: rgba(0, 242, 254, 0.15);
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --accent-cyan: #00f2fe;
+      --accent-purple: #7f00ff;
+      --color-success: #00f5a0;
+      --color-danger: #ff4f70;
+      --color-warning: #ffb800;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'Fira Code', monospace;
+      --transition-speed: 0.3s;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      background-image: 
+        radial-gradient(at 10% 20%, rgba(127, 0, 255, 0.08) 0px, transparent 50%),
+        radial-gradient(at 90% 80%, rgba(0, 242, 254, 0.06) 0px, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    /* Layout Structure */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    /* Header styling */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 3rem;
+      animation: fadeInDown 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.25rem;
+      color: #000;
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-logo::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transform: rotate(45deg);
+      transition: 0.5s;
+    }
+
+    .brand-section:hover .brand-logo::after {
+      left: 120%;
+      transition: 0.8s ease-in-out;
+    }
+
+    .brand-name h1 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      letter-spacing: -0.05em;
+      background: linear-gradient(to right, #ffffff, #cfd9df);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-name p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .connection-status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.03);
+      padding: 0.5rem 1rem;
+      border-radius: 30px;
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(10px);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--color-success);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--color-success);
+      animation: pulse 1.5s infinite alternate;
+    }
+
+    /* Grid layout */
+    .grid {
+      display: grid;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .grid-stats {
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .grid-main {
+      grid-template-columns: 1.2fr 1fr;
+      align-items: start;
+      animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @media (max-width: 968px) {
+      .grid-main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Card styling */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 1.75rem;
+      position: relative;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: transform var(--transition-speed), border-color var(--transition-speed), box-shadow var(--transition-speed);
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent-cyan), var(--accent-purple), transparent);
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(0, 242, 254, 0.25);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), 0 0 20px var(--card-border-glow);
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    /* Stats Card specifics */
+    .stat-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .stat-info h3 {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-number {
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .stat-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .stat-total .stat-icon { background: rgba(127, 0, 255, 0.15); color: #b16cff; }
+    .stat-active .stat-icon { background: rgba(0, 245, 160, 0.15); color: var(--color-success); }
+    .stat-revoked .stat-icon { background: rgba(255, 79, 112, 0.15); color: var(--color-danger); }
+    .stat-expired .stat-icon { background: rgba(255, 184, 0, 0.15); color: var(--color-warning); }
+
+    /* Interactive Elements Styling */
+    h2.card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    input[type="text"], select, textarea {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      transition: all var(--transition-speed);
+      outline: none;
+    }
+
+    input[type="text"]:focus, select:focus, textarea:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .select-type-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .selector-card {
+      border: 2px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition-speed);
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    .selector-card.active {
+      border-color: var(--accent-cyan);
+      background: rgba(0, 242, 254, 0.05);
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.15);
+    }
+
+    .selector-card h4 {
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .selector-card p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* Range slider custom styling */
+    .slider-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .slider-container input[type="range"] {
+      flex: 1;
+      height: 6px;
+      border-radius: 3px;
+      outline: none;
+      -webkit-appearance: none;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .slider-container input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0, 242, 254, 0.6);
+      transition: transform 0.1s;
+    }
+
+    .slider-container input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+    }
+
+    .slider-val {
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--accent-cyan);
+      min-width: 60px;
+      text-align: right;
+    }
+
+    .btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+      border: none;
+      color: #000;
+      padding: 0.85rem 1.5rem;
+      font-weight: 700;
+      border-radius: 12px;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      transition: all var(--transition-speed);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transition: 0.5s;
+    }
+
+    .btn:hover::after {
+      left: 100%;
+    }
+
+    .btn:hover {
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: none;
+    }
+
+    .btn-danger {
+      background: rgba(255, 79, 112, 0.1);
+      border: 1px solid rgba(255, 79, 112, 0.3);
+      color: var(--color-danger);
+    }
+
+    .btn-danger:hover {
+      background: var(--color-danger);
+      color: #000;
+      box-shadow: 0 0 15px rgba(255, 79, 112, 0.4);
+    }
+
+    /* Token Result Box */
+    .token-result-box {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px dashed var(--accent-cyan);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-top: 1.5rem;
+      display: none;
+      animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .result-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--accent-cyan);
+      font-weight: 600;
+    }
+
+    .token-display {
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .token-text {
+      overflow-x: auto;
+      white-space: nowrap;
+      flex: 1;
+      scrollbar-width: none;
+    }
+    .token-text::-webkit-scrollbar {
+      display: none;
+    }
+
+    .copy-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: color 0.2s;
+      padding: 0.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .copy-btn:hover {
+      color: var(--accent-cyan);
+    }
+
+    /* Validation Result Area */
+    .validation-result {
+      margin-top: 1.25rem;
+      padding: 1rem;
+      border-radius: 12px;
+      display: none;
+      animation: fadeIn 0.3s;
+    }
+
+    .val-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .val-valid { background: rgba(0, 245, 160, 0.15); color: var(--color-success); border: 1px solid rgba(0, 245, 160, 0.3); }
+    .val-invalid { background: rgba(255, 79, 112, 0.15); color: var(--color-danger); border: 1px solid rgba(255, 79, 112, 0.3); }
+    
+    .val-details-list {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      display: grid;
+      gap: 0.35rem;
+    }
+
+    .val-details-list span {
+      color: var(--text-main);
+      font-family: var(--font-mono);
+    }
+
+    /* Filter Tabs */
+    .filter-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 0.75rem;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .tab-btn.active {
+      color: var(--accent-cyan);
+      background: rgba(0, 242, 254, 0.08);
+    }
+
+    /* Table Styling */
+    .table-container {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    th {
+      background: rgba(255, 255, 255, 0.02);
+      padding: 1rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      vertical-align: middle;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    .col-token {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      max-width: 150px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+
+    .badge-active { background: rgba(0, 245, 160, 0.15); color: var(--color-success); }
+    .badge-expired { background: rgba(255, 184, 0, 0.15); color: var(--color-warning); }
+    .badge-revoked { background: rgba(255, 79, 112, 0.15); color: var(--color-danger); }
+    .badge-invalid { background: rgba(255, 255, 255, 0.1); color: var(--text-muted); }
+
+    .action-btn-revoke {
+      background: rgba(255, 79, 112, 0.1);
+      border: 1px solid rgba(255, 79, 112, 0.2);
+      color: var(--color-danger);
+      padding: 0.35rem 0.75rem;
+      font-size: 0.75rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .action-btn-revoke:hover {
+      background: var(--color-danger);
+      color: #000;
+    }
+
+    /* Monospace Terminal Logs */
+    .terminal-container {
+      background: #04060b;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .terminal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 0.5rem;
+    }
+
+    .terminal-title {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--accent-cyan);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .terminal-title::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ff5f56;
+      box-shadow: 12px 0 0 #ffbd2e, 24px 0 0 #27c93f;
+      display: inline-block;
+      margin-right: 2rem;
+    }
+
+    .terminal-body {
+      height: 180px;
+      overflow-y: auto;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      line-height: 1.6;
+      color: #cfd9df;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.1) transparent;
+    }
+
+    .terminal-body::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .terminal-body::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+    }
+
+    .log-line {
+      margin-bottom: 0.25rem;
+      white-space: pre-wrap;
+    }
+    
+    .log-date { color: #8892b0; }
+    .log-info { color: #57b6f6; }
+    .log-warn { color: var(--color-warning); }
+
+    /* Danger zone card */
+    .danger-zone {
+      margin-top: 2rem;
+      border-color: rgba(255, 79, 112, 0.25);
+    }
+
+    .danger-zone:hover {
+      border-color: rgba(255, 79, 112, 0.5);
+      box-shadow: 0 0 20px rgba(255, 79, 112, 0.1);
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: rgba(17, 24, 40, 0.9);
+      border: 1px solid var(--accent-cyan);
+      border-radius: 10px;
+      padding: 0.75rem 1.25rem;
+      font-size: 0.9rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1000;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes scaleIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes pulse {
+      from { opacity: 0.6; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeInUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes fadeInDown {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="brand-section">
+        <div class="brand-logo">🐱</div>
+        <div class="brand-name">
+          <h1>BinCat</h1>
+          <p>Token Management System</p>
+        </div>
+      </div>
+      <div class="connection-status">
+        <div class="status-dot"></div>
+        <span>SDK Connected</span>
+      </div>
+    </header>
+
+    <!-- Stats Dashboard -->
+    <div class="grid grid-stats">
+      <div class="card stat-card">
+        <div class="stat-info">
+          <h3>Total Generated</h3>
+          <div class="stat-number" id="stat-total">0</div>
+        </div>
+        <div class="stat-icon stat-total">🪙</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-info">
+          <h3>Active Tokens</h3>
+          <div class="stat-number" id="stat-active" style="color: var(--color-success);">0</div>
+        </div>
+        <div class="stat-icon stat-active">✔️</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-info">
+          <h3>Revoked Tokens</h3>
+          <div class="stat-number" id="stat-revoked" style="color: var(--color-danger);">0</div>
+        </div>
+        <div class="stat-icon stat-revoked">🚫</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-info">
+          <h3>Expired Tokens</h3>
+          <div class="stat-number" id="stat-expired" style="color: var(--color-warning);">0</div>
+        </div>
+        <div class="stat-icon stat-expired">⏳</div>
+      </div>
+    </div>
+
+    <!-- Main Workspace -->
+    <div class="grid grid-main">
+      <!-- Left Column: Token List & Logs -->
+      <div class="left-col">
+        <!-- Token Management Table -->
+        <div class="card">
+          <h2 class="card-title">📦 Active Database Tokens</h2>
+          
+          <div class="filter-tabs">
+            <button class="tab-btn active" id="tab-all" onclick="setFilter('all')">All</button>
+            <button class="tab-btn" id="tab-active" onclick="setFilter('active')">Active</button>
+            <button class="tab-btn" id="tab-expired" onclick="setFilter('expired')">Expired</button>
+            <button class="tab-btn" id="tab-revoked" onclick="setFilter('revoked')">Revoked</button>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Token</th>
+                  <th>Type</th>
+                  <th>Description</th>
+                  <th>Created</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="tokens-table-body">
+                <tr>
+                  <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                    Loading tokens database...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Terminal Logs -->
+        <div class="terminal-container">
+          <div class="terminal-header">
+            <div class="terminal-title">System Console Logs</div>
+            <button class="copy-btn" title="Refresh Logs" onclick="fetchLogs()">🔄</button>
+          </div>
+          <div class="terminal-body" id="logs-body">
+            <!-- Console rows -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Forms -->
+      <div class="right-col">
+        <!-- Token Generator -->
+        <div class="card">
+          <h2 class="card-title">✨ Generate Secure Token</h2>
+          
+          <div class="form-group">
+            <label>Encryption Standard</label>
+            <div class="select-type-group">
+              <div class="selector-card active" id="type-fernet" onclick="selectType('fernet')">
+                <h4>Fernet</h4>
+                <p>Symmetric (Coded)</p>
+              </div>
+              <div class="selector-card" id="type-jwt" onclick="selectType('jwt')">
+                <h4>JWT</h4>
+                <p>Stateful Claims</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="input-expiration">Expiration (Minutes)</label>
+            <div class="slider-container">
+              <input type="range" id="input-expiration" min="1" max="1440" value="30" oninput="updateExpVal(this.value)">
+              <div class="slider-val" id="exp-val">30m</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="input-description">Description / Purpose</label>
+            <textarea id="input-description" rows="2" placeholder="e.g. Frontend web client integration"></textarea>
+          </div>
+
+          <button id="btn-generate" class="btn" onclick="generateToken()">
+            <span>Generate Token</span>
+            <span>⚡</span>
+          </button>
+
+          <!-- Generated Token Result -->
+          <div class="token-result-box" id="result-box">
+            <div class="result-header">
+              <span>Token Created Successfully!</span>
+              <span id="result-type-badge">Fernet</span>
+            </div>
+            <div class="token-display">
+              <span class="token-text" id="result-token-text">...</span>
+              <button class="copy-btn" id="btn-copy" onclick="copyToken()" title="Copy Token">📋</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Token Validator -->
+        <div class="card" style="margin-top: 1.5rem;">
+          <h2 class="card-title">🔍 Real-time Token Validator</h2>
+          
+          <div class="form-group">
+            <label for="input-validate-token">Paste token value</label>
+            <input type="text" id="input-validate-token" placeholder="Enter encrypted token string..." oninput="clearValidation()">
+          </div>
+
+          <button id="btn-validate" class="btn btn-secondary" onclick="validateToken()">
+            Validate authenticity
+          </button>
+
+          <!-- Validation result card -->
+          <div class="validation-result" id="validation-result-area">
+            <!-- Dynamic validation info -->
+          </div>
+        </div>
+
+        <!-- Danger Zone -->
+        <div class="card danger-zone">
+          <h2 class="card-title" style="color: var(--color-danger);">⚠️ Danger Zone</h2>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Clearing the database deletes all logs and token signatures. This action is irreversible.
+          </p>
+          <button id="btn-purge" class="btn btn-danger" onclick="purgeSystem()">Purge System Database</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast notifications -->
+  <div class="toast" id="toast">
+    <span id="toast-text">Message here</span>
+  </div>
+
+  <script>
+    let currentFilter = 'all';
+    let selectedTokenType = 'fernet';
+    let allTokens = [];
+
+    // Initialize UI
+    document.addEventListener("DOMContentLoaded", () => {
+      fetchTokens();
+      fetchLogs();
+      // Poll logs and tokens every 5 seconds
+      setInterval(() => {
+        fetchTokens(true);
+        fetchLogs();
+      }, 5000);
+    });
+
+    // Toast Notification helper
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      document.getElementById("toast-text").innerText = message;
+      toast.classList.add("show");
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3000);
+    }
+
+    // Select token type selector
+    function selectType(type) {
+      selectedTokenType = type;
+      document.getElementById("type-fernet").classList.toggle("active", type === 'fernet');
+      document.getElementById("type-jwt").classList.toggle("active", type === 'jwt');
+    }
+
+    // Expiration slider text updater
+    function updateExpVal(val) {
+      const display = document.getElementById("exp-val");
+      if (val >= 60) {
+        const hours = Math.floor(val / 60);
+        const mins = val % 60;
+        display.innerText = `${hours}h${mins > 0 ? ` ${mins}m` : ''}`;
+      } else {
+        display.innerText = `${val}m`;
+      }
+    }
+
+    // Copy to Clipboard
+    function copyToken() {
+      const text = document.getElementById("result-token-text").innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast("Token copied to clipboard!");
+        const copyBtn = document.getElementById("btn-copy");
+        copyBtn.innerText = "✔️";
+        setTimeout(() => { copyBtn.innerText = "📋"; }, 2000);
+      });
+    }
+
+    // Filter selector
+    function setFilter(filter) {
+      currentFilter = filter;
+      document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+      document.getElementById(`tab-${filter}`).classList.add("active");
+      renderTokensTable();
+    }
+
+    // Fetch list of tokens
+    function fetchTokens(silent = false) {
+      fetch("/api/tokens")
+        .then(res => res.json())
+        .then(data => {
+          allTokens = data;
+          renderTokensTable();
+          updateMetrics();
+        })
+        .catch(err => {
+          console.error("Error fetching tokens:", err);
+          if (!silent) showToast("Failed to load tokens from database.");
+        });
+    }
+
+    // Render tokens list in table
+    function renderTokensTable() {
+      const tbody = document.getElementById("tokens-table-body");
+      
+      const filtered = allTokens.filter(t => {
+        if (currentFilter === 'all') return true;
+        return t.status === currentFilter;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2rem;">No tokens found for current filter.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(t => {
+        const dateObj = new Date(t.created_at);
+        const formattedDate = dateObj.toLocaleDateString() + ' ' + dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        
+        let statusClass = "badge-invalid";
+        if (t.status === 'active') statusClass = "badge-active";
+        else if (t.status === 'expired') statusClass = "badge-expired";
+        else if (t.status === 'revoked') statusClass = "badge-revoked";
+
+        const revokeAction = t.status === 'active' 
+          ? `<button class="action-btn-revoke" onclick="revokeToken('${t.token}')">Revoke</button>`
+          : `<span style="color: var(--text-muted); font-size: 0.75rem;">N/A</span>`;
+
+        return `
+          <tr>
+            <td class="col-token" title="${t.token}">${t.token}</td>
+            <td><span class="badge" style="background: rgba(255,255,255,0.05); color: #fff;">${t.token_type}</span></td>
+            <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${t.description || 'No description'}">
+              ${t.description || '<span style="color: var(--text-muted);">None</span>'}
+            </td>
+            <td style="font-size: 0.8rem; color: var(--text-muted);">${formattedDate}</td>
+            <td><span class="badge ${statusClass}">${t.status}</span></td>
+            <td>${revokeAction}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // Update stats counters
+    function updateMetrics() {
+      const stats = {
+        total: allTokens.length,
+        active: allTokens.filter(t => t.status === 'active').length,
+        revoked: allTokens.filter(t => t.status === 'revoked').length,
+        expired: allTokens.filter(t => t.status === 'expired').length
+      };
+
+      document.getElementById("stat-total").innerText = stats.total;
+      document.getElementById("stat-active").innerText = stats.active;
+      document.getElementById("stat-revoked").innerText = stats.revoked;
+      document.getElementById("stat-expired").innerText = stats.expired;
+    }
+
+    // Fetch system console logs
+    function fetchLogs() {
+      fetch("/api/logs")
+        .then(res => res.json())
+        .then(lines => {
+          const body = document.getElementById("logs-body");
+          if (lines.length === 0) {
+            body.innerHTML = '<div style="color: var(--text-muted);">No log records yet. Generate a token to trigger logging events.</div>';
+            return;
+          }
+
+          body.innerHTML = lines.map(line => {
+            // Highlight format: "timestamp - level - message"
+            const parts = line.split(" - ");
+            if (parts.length >= 3) {
+              const date = `<span class="log-date">[${parts[0]}]</span>`;
+              const level = `<span class="log-info">${parts[1]}</span>`;
+              const msg = parts.slice(2).join(" - ");
+              return `<div class="log-line">${date} ${level}: ${msg}</div>`;
+            }
+            return `<div class="log-line">${line}</div>`;
+          }).join('');
+          
+          // Auto scroll to bottom
+          body.scrollTop = body.scrollHeight;
+        })
+        .catch(err => console.error("Error fetching logs:", err));
+    }
+
+    // Generate action
+    function generateToken() {
+      const description = document.getElementById("input-description").value;
+      const expiration = document.getElementById("input-expiration").value;
+
+      fetch("/api/tokens/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token_type: selectedTokenType,
+          expiration_minutes: expiration,
+          description: description
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === "success") {
+          showToast("Token generated successfully!");
+          
+          const resultBox = document.getElementById("result-box");
+          document.getElementById("result-token-text").innerText = data.token;
+          document.getElementById("result-type-badge").innerText = data.token_type.toUpperCase();
+          resultBox.style.display = "block";
+
+          // Clear form description
+          document.getElementById("input-description").value = "";
+
+          // Refresh token lists
+          fetchTokens();
+          fetchLogs();
+        } else {
+          showToast("Error: " + data.message);
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        showToast("Server communication failure.");
+      });
+    }
+
+    // Revoke Action
+    function revokeToken(token) {
+      if(!confirm("Are you sure you want to revoke this token? It will be marked invalid immediately.")) return;
+
+      fetch("/api/tokens/revoke", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: token })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === "success") {
+          showToast("Token revoked successfully.");
+          fetchTokens();
+          fetchLogs();
+        } else {
+          showToast("Revocation failed: " + data.message);
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        showToast("Revocation failure.");
+      });
+    }
+
+    // Validate Action
+    function validateToken() {
+      const token = document.getElementById("input-validate-token").value.trim();
+      if(!token) {
+        showToast("Please enter a token to validate.");
+        return;
+      }
+
+      fetch("/api/tokens/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: token })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === "success") {
+          const area = document.getElementById("validation-result-area");
+          area.style.display = "block";
+
+          const isValid = data.is_valid;
+          const details = data.details;
+
+          let badgeHtml = "";
+          let detailsHtml = "";
+
+          if (isValid) {
+            badgeHtml = `<span class="val-status-badge val-valid">✔️ Valid Token</span>`;
+          } else {
+            const isRevoked = details.revoked;
+            const statusText = isRevoked ? "Revoked Token" : "Invalid or Expired";
+            badgeHtml = `<span class="val-status-badge val-invalid">🚫 ${statusText}</span>`;
+          }
+
+          if (details && details.created_at) {
+            detailsHtml = `
+              <div class="val-details-list">
+                <div>Type: <span>${details.token_type.toUpperCase()}</span></div>
+                <div>Created: <span>${details.created_at}</span></div>
+                <div>Life: <span>${details.db_expiration_minutes}m</span></div>
+                <div>Purpose: <span>${details.description || 'N/A'}</span></div>
+              </div>
+            `;
+          } else {
+            detailsHtml = `<div style="font-size: 0.85rem; color: var(--text-muted);">This token does not exist in the dashboard SQLite database, but its structure or signature is invalid.</div>`;
+          }
+
+          area.innerHTML = badgeHtml + detailsHtml;
+          
+          if (isValid) {
+            area.style.border = "1px solid var(--color-success)";
+            area.style.background = "rgba(0, 245, 160, 0.03)";
+          } else {
+            area.style.border = "1px solid var(--color-danger)";
+            area.style.background = "rgba(255, 79, 112, 0.03)";
+          }
+        } else {
+          showToast("Error validation: " + data.message);
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        showToast("Validation request failed.");
+      });
+    }
+
+    function clearValidation() {
+      document.getElementById("validation-result-area").style.display = "none";
+    }
+
+    // Purge action
+    function purgeSystem() {
+      if(!confirm("⚠️ WARNING: This will permanently delete all logs and delete all tokens in the database. Are you absolutely sure?")) return;
+
+      fetch("/api/tokens/purge", {
+        method: "POST"
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === "success") {
+          showToast("System database purged successfully.");
+          fetchTokens();
+          fetchLogs();
+          clearValidation();
+          document.getElementById("result-box").style.display = "none";
+        } else {
+          showToast("Purge failed: " + data.message);
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        showToast("System purge failed.");
+      });
+    }
+  </script>
+</body>
+</html>

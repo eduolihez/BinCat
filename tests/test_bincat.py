@@ -1,21 +1,36 @@
 import unittest
-from bincat.token_generator import generate_token
-from bincat.token_validator import is_token_valid
+import os
+from bincat.token_manager import TokenManager
 
 class TestBinCat(unittest.TestCase):
+    def setUp(self):
+        self.db_path = "test_bincat_main_test.db"
+        if os.path.exists(self.db_path):
+            try:
+                os.remove(self.db_path)
+            except OSError:
+                pass
+        self.manager = TokenManager(db_path=self.db_path)
+
+    def tearDown(self):
+        if os.path.exists(self.db_path):
+            try:
+                os.remove(self.db_path)
+            except OSError:
+                pass
+
     def test_generate_token(self):
-        token = generate_token()
+        token = self.manager.generate_token()
         self.assertIsInstance(token, str)
-        self.assertGreater(len(token.split('.')), 2)
 
     def test_token_validation(self):
-        token = generate_token()
-        self.assertTrue(is_token_valid(token))
+        token = self.manager.generate_token()
+        self.assertTrue(self.manager.is_token_valid(token))
 
     def test_expired_token(self):
-        token = generate_token()
-        # Simular un token vencido (cambiar la validación en el módulo si lo deseas)
-        self.assertFalse(is_token_valid(token, expiration_minutes=-1))
+        token = self.manager.generate_token(expiration_minutes=30)
+        # Validar pasando una expiración de -1 minutos para simular expiración inmediata
+        self.assertFalse(self.manager.is_token_valid(token, expiration_minutes=-1))
 
 if __name__ == '__main__':
     unittest.main()

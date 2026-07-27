@@ -1,35 +1,24 @@
 import os
-import sqlite3
+import sys
 
+# Añadimos el directorio raíz del proyecto al sys.path para poder importar bincat
+root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(root_dir)
+
+from bincat.token_manager import TokenManager
 
 def purge_logs_and_db():
-    """Deletes all log files and clears the database."""
+    """Borra todos los logs y limpia la base de datos."""
     try:
-        # Path to the log file in the root directory
-        root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        log_path = os.path.join(root_dir, "bincat.log")
-        
-        if os.path.exists(log_path):
-            os.remove(log_path)
-            print("Logs successfully deleted.")
-        else:
-            print("No log file found to delete.")
-
-        # Path to the database file in the root directory
         db_path = os.path.join(root_dir, "bincat_tokens.db")
-        
-        if os.path.exists(db_path):
-            with sqlite3.connect(db_path) as conn:
-                cursor = conn.cursor()
-                cursor.execute("DELETE FROM tokens")
-                conn.commit()
+        manager = TokenManager(db_path=db_path)
+        if manager.purge_all():
+            print("Logs successfully deleted.")
             print("Database successfully cleared.")
         else:
-            print("No database file found to clear.")
-
+            print("Failed to clear some files.")
     except Exception as e:
         print(f"An error occurred: {e}")
-
 
 if __name__ == "__main__":
     purge_logs_and_db()

@@ -9,11 +9,15 @@ load_dotenv()
 def main():
     print(Fore.CYAN + "Welcome to BinCat Token Manager!" + Style.RESET_ALL)
     
-    # Verificar que la clave de cifrado esté disponible
+    # Verificar y auto-generar la clave si no existe
     encryption_key = os.getenv("ENCRYPTION_KEY")
     if not encryption_key:
-        print(Fore.RED + "Error: ENCRYPTION_KEY is missing. Please add it to your .env file." + Style.RESET_ALL)
-        return
+        from cryptography.fernet import Fernet
+        encryption_key = Fernet.generate_key().decode()
+        with open(".env", "a") as f:
+            f.write(f"\nENCRYPTION_KEY={encryption_key}\n")
+        os.environ["ENCRYPTION_KEY"] = encryption_key
+        print(Fore.YELLOW + "Generated new ENCRYPTION_KEY and saved to .env file." + Style.RESET_ALL)
     
     # Inicializar TokenManager
     token_manager = TokenManager()
