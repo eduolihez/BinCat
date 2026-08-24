@@ -1,3 +1,8 @@
+# Ignorar secretos y credenciales
+.env
+.env.*
+!.env.example
+
 # Ignorar archivos de configuración de Python
 *.pyc
 *.pyo

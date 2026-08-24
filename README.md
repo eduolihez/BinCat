@@ -1,5 +1,9 @@
 # BinCat | Premium Token Manager & Dashboard
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
+[![Flask](https://img.shields.io/badge/Flask-Dashboard-000000.svg?logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
+
 ## Overview
 BinCat is a robust token management system designed for secure token generation, database auditing, and validation. This project leverages encryption, detailed log audit trails, and modular Python components to offer a flexible SDK for managing tokens in modern applications. It includes an interactive, glassmorphic **Web Dashboard** and a developer-friendly REST API.
 
@@ -63,7 +67,7 @@ tests/                  # Isolated Unit Tests
 ### Steps
 1. Clone the repository and navigate into it:
    ```bash
-   git clone https://github.com/your-username/BinCat.git
+   git clone https://github.com/eduolihez/BinCat.git
    cd BinCat
    ```
 
@@ -118,6 +122,12 @@ python -m unittest discover -s tests
 ```
 
 ---
+
+## Security
+`.env` holds the `ENCRYPTION_KEY` that encrypts every Fernet token in your database — it is
+generated automatically on first run and is listed in `.gitignore`. Never commit your real
+`.env`; use `.env.example` as a template. If a key is ever exposed, rotate it (delete `.env`
+and let BinCat regenerate one) — tokens encrypted under the old key will need to be reissued.
 
 ## License
 This project is licensed under the MIT License. See the `LICENSE` file for details.
