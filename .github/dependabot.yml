@@ -1,10 +1,43 @@
+# ===========================================================================
+#  Dependabot — BinCat
+#
+#  Sustituye a la version anterior, que tenia tres problemas:
+#    - interval "daily" en un proyecto que cambia poco: mucho ruido a cambio
+#      de nada. Pasa a semanal, como el resto de repositorios.
+#    - prefix "fix" en los commits: estas actualizaciones no arreglan nada,
+#      son mantenimiento de dependencias. Pasa a "deps" / "ci".
+#    - no vigilaba las GitHub Actions, asi que dependabot-auto-merge.yml se
+#      quedaba con versiones viejas sin avisar.
+# ===========================================================================
 version: 2
+
 updates:
-  # Define the package manager to use
-  - package-ecosystem: "pip"  # For Python projects, change this if using another package manager (e.g., npm, yarn)
-    directory: "/"  # Location of your dependency file, '/' refers to the root of the repository
+  # --- GitHub Actions (.github/workflows/) --------------------------------
+  - package-ecosystem: "github-actions"
+    directory: "/"
     schedule:
-      interval: "daily"  # Options: "daily", "weekly", "monthly"
+      interval: "weekly"
+      day: "monday"
     commit-message:
-      prefix: "fix"  # Commit message prefix for the update PRs
-    versioning-strategy: "increase"  # Strategy to use when a new version is available ("increase", "lockfile-only", "auto")
+      prefix: "ci"
+    groups:
+      actions:
+        patterns:
+          - "*"
+
+  # --- pip (requirements.txt) ---------------------------------------------
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    commit-message:
+      prefix: "deps"
+    open-pull-requests-limit: 5
+    # Menor y parche agrupados en un solo pull request; las versiones mayores
+    # llegan por separado para poder revisarlas con calma.
+    groups:
+      dependencias-menores:
+        update-types:
+          - "minor"
+          - "patch"
