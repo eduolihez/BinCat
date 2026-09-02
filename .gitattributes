@@ -1,0 +1,24 @@
+# ===========================================================================
+#  Linguist — como GitHub clasifica este repositorio.
+#
+#  EL PROBLEMA: BinCat es un proyecto Python, pero GitHub lo mostraba como
+#  "HTML". La causa es que templates/index.html ocupa 37 KB el solo, frente a
+#  los 30 KB repartidos entre todos los .py — y Linguist decide el lenguaje
+#  principal por bytes, no por relevancia. Un unico template de Flask estaba
+#  tapando el proyecto entero y contradiciendo la descripcion del repositorio
+#  ("built using Python and SQLite").
+#
+#  Las reglas de abajo no borran nada: solo le dicen a Linguist que ese HTML
+#  es plantilla y que old/ es codigo historico, para que la barra de lenguajes
+#  refleje lo que el repositorio realmente es.
+# ===========================================================================
+
+# Plantillas de Flask: son markup de presentacion, no el codigo del proyecto.
+templates/*.html linguist-detectable=false
+
+# old/ conserva la primera version de BinCat por valor historico.
+# Se marca como vendored para que no cuente en las estadisticas.
+old/** linguist-vendored
+
+# Asegura que Python sea lo que se anuncia en la portada del repositorio.
+*.py linguist-detectable=true
