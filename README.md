@@ -4,25 +4,27 @@
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
 [![Flask](https://img.shields.io/badge/Flask-Dashboard-000000.svg?logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
 
-BinCat generates, validates and revokes authentication tokens, and keeps an
-audit trail of every operation. It ships as a Python SDK you can drop into an
-application, plus a web dashboard and a REST API on top of it.
+### **[Versión en Español](README.md)** · [English version](README.en.md)
 
-## Features
+BinCat genera, valida y revoca tokens de autenticación, y deja registro de cada
+operación. Se distribuye como un SDK de Python que puedes meter en tu
+aplicación, con un panel web y una API REST encima.
 
-It issues two kinds of token: Fernet, using symmetric cryptography, and
-cryptographically signed JWTs carrying stateful claims. Expiration intervals
-are configurable from the dashboard slider or the API, and any token can be
-revoked by hand to kill a session immediately.
+## Funcionalidades
 
-The dashboard is a dark-themed single page where you generate, validate and
-revoke tokens. It shows counts of total, active, revoked and expired tokens,
-and a logging console that traces SDK actions as they happen.
+Emite dos tipos de token: Fernet, con criptografía simétrica, y JWT firmados
+criptográficamente con claims con estado. Los intervalos de expiración se
+configuran desde el slider del panel o desde la API, y cualquier token se puede
+revocar a mano para matar una sesión al instante.
 
-There is nothing to configure before the first run. If BinCat finds no keys in
-`.env`, it generates cryptographically secure ones.
+El panel es una página única de tema oscuro donde generas, validas y revocas
+tokens. Muestra el recuento de tokens totales, activos, revocados y expirados, y
+una consola de logs que traza las acciones del SDK según ocurren.
 
-## Project structure
+No hay nada que configurar antes del primer arranque. Si BinCat no encuentra
+claves en `.env`, genera unas criptográficamente seguras.
+
+## Estructura del proyecto
 
 ```
 .env                    # Environment credentials (auto-generated)
@@ -54,72 +56,72 @@ tests/                  # Isolated Unit Tests
   test_token_manager.py
 ```
 
-## Installation
+## Instalación
 
-You need Python 3.10 or later and `pip`.
+Necesitas Python 3.10 o superior y `pip`.
 
-1. Clone the repository and navigate into it:
+1. Clona el repositorio y entra en la carpeta:
    ```bash
    git clone https://github.com/eduolihez/BinCat.git
    cd BinCat
    ```
 
-2. (Optional) Set up a virtual environment:
+2. (Opcional) Monta un entorno virtual:
    ```bash
    python -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
-3. Install dependencies:
+3. Instala las dependencias:
    ```bash
    pip install -r requirements.txt
    ```
 
-## Usage
+## Uso
 
-Start the Flask development server and open `http://localhost:5000` for the
-dashboard:
+Arranca el servidor de desarrollo de Flask y abre `http://localhost:5000` para
+el panel:
 
 ```bash
 python app.py
 ```
 
-There is also a terminal interface, if you would rather stay in the shell:
+También hay una interfaz de terminal, si prefieres no salir de la shell:
 
 ```bash
 python main.py
 ```
 
-## REST API endpoints
+## Endpoints de la API REST
 
-Send all payloads as `application/json`.
+Manda todos los payloads como `application/json`.
 
-| Method | Endpoint | Description |
+| Método | Endpoint | Descripción |
 |--------|----------|-------------|
-| GET | `/api/tokens` | Retrieve list of all tokens with metadata (status, type, creation, duration). |
-| POST | `/api/tokens/generate` | Generate a token. Body: `{"token_type": "fernet\|jwt", "expiration_minutes": 30, "description": "text"}`. |
-| POST | `/api/tokens/validate` | Check if a token is valid. Body: `{"token": "token_string"}`. |
-| POST | `/api/tokens/revoke` | Revoke a token immediately. Body: `{"token": "token_string"}`. |
-| POST | `/api/tokens/purge` | Permanently wipe database entries and delete log files. |
-| GET | `/api/logs` | Fetch the last 50 entries of log activity. |
+| GET | `/api/tokens` | Devuelve la lista de tokens con sus metadatos (estado, tipo, creación, duración). |
+| POST | `/api/tokens/generate` | Genera un token. Cuerpo: `{"token_type": "fernet\|jwt", "expiration_minutes": 30, "description": "text"}`. |
+| POST | `/api/tokens/validate` | Comprueba si un token es válido. Cuerpo: `{"token": "token_string"}`. |
+| POST | `/api/tokens/revoke` | Revoca un token al momento. Cuerpo: `{"token": "token_string"}`. |
+| POST | `/api/tokens/purge` | Borra permanentemente las entradas de la base de datos y los archivos de log. |
+| GET | `/api/logs` | Devuelve las últimas 50 entradas del log de actividad. |
 
-## Testing
+## Tests
 
-The tests run against an isolated SQLite database, so they leave your
-development one alone:
+Los tests corren contra una base de datos SQLite aislada, así que no tocan la de
+desarrollo:
 
 ```bash
 python -m unittest discover -s tests
 ```
 
-## Security
+## Seguridad
 
-`.env` holds the `ENCRYPTION_KEY` that encrypts every Fernet token in your
-database. BinCat generates it on first run and `.gitignore` already covers it.
-Never commit your real `.env`; use `.env.example` as a template. If a key ever
-leaks, delete `.env` and let BinCat regenerate one, then reissue the tokens that
-were encrypted under the old key.
+`.env` contiene la `ENCRYPTION_KEY` que cifra todos los tokens Fernet de tu base
+de datos. BinCat la genera en el primer arranque y el `.gitignore` ya la cubre.
+No subas nunca tu `.env` real; usa `.env.example` como plantilla. Si una clave se
+filtra, borra `.env` y deja que BinCat genere otra, y luego reemite los tokens
+que estaban cifrados con la anterior.
 
-## License
+## Licencia
 
-MIT. See the `LICENSE` file for details.
+MIT. Ver el archivo `LICENSE`.
